@@ -1,32 +1,69 @@
-import { View, Text, Alert } from 'react-native'
-import React, {useState, useEffect} from 'react'
-
-
-
-
-import { FIREBASE_AUTH } from '../firebase/firebaseConfig';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { Button } from 'react-native-paper';
-
-
+import { View, Text, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Login from '../screens/Login';
+import Updates from "expo-updates"
 
 
 // import { Button, Header, XGroup, XStack, YStack } from 'tamagui'
-const ProfilePage = () => {
+const ProfilePage = ({navigation} : {navigation: any}) => {
+  const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-     const handleLogout = async () => {
+  async function getData() {
     try {
-      await signOut(FIREBASE_AUTH)
-      Alert.alert("Log out", "You are now logged out");
-      window.location.reload();
+      const token = await AsyncStorage.getItem('token');
+      console.log("Token:", token);
+
+      if (token) {
+        const response = await axios.post('http://192.168.1.19:8000/api/user-data', { token });
+        console.log("User Data:", response.data);
+        setUserData(response.data.data); 
+      } else {
+        console.log("No token found");
+      }
     } catch (error) {
-      console.log("Error to log out");
-    //   Alert.alert("Error to sign out please try again")
+      console.log("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+const logout = async () => {
+  try {
+    await AsyncStorage.removeItem('token');
+    navigation.getParent().setParams({ token: null });
+     navigation.reset({
+      index: 0,
+      routes: [{ name: 'Auth' }],
+    });
+  } catch (error) {
+    console.log("Cannot Sign out");
+    
+  }
+}
+
+  if (loading) {
+    return <Text>Loading...</Text>;
   }
   return (
     <View>
-      <Button onPress={handleLogout}>Log out</Button>
+      {userData ? (
+        <>   
+      <Text>Email: {userData.email}</Text> 
+       <Text>name: {userData.fullname}</Text> 
+       <Text>Phone Number: {userData.phoneNumber}</Text> 
+       
+      <Button title='Sign out' onPress={logout}/>
+      </> 
+      ) : (
+        <Text>No user data found</Text>
+      )}
     </View>
   )
 }

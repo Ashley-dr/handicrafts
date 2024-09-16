@@ -9,18 +9,9 @@ import { TamaguiProvider } from 'tamagui'
 const _layout = () => {
   const colorScheme = useColorScheme();
   return (
-  
- 
-       <Stack>
-     
-          <Tabs.Screen name='index' options={{title: "Home"}}/>
-          <Tabs.Screen name='Products' options={{title: "Products"}}/>
-         
-         
+       <Stack>     
+          <Tabs.Screen name='index' options={{title: "HANDICRAFT"}}/>    
         </Stack>
-   
- 
-   
   )
 }
 

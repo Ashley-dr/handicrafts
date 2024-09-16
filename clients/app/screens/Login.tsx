@@ -4,34 +4,74 @@ import { FIREBASE_AUTH } from '../firebase/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { Button, TextInput } from 'react-native-paper';
 import { AlertDialog} from 'tamagui';
-import Products from '../Products';
-
+import Products from '../pages/Products';
+import axios from 'axios';
 import ForgotPassword from './ForgotPassword';
 import { Link } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Updates from "expo-updates"
+import { useNavigation } from '@react-navigation/native';
 
-
-const Login = ({navigation} : {navigation: any}) => {
+import ProfilePage from '../pages/ProfilePage';
+const Login = ({navigation}:{navigation: any}) => {
+    // const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const auth = FIREBASE_AUTH;
 
-    const handleLogin = async () => {
-        setLoading(true);
+    // const handleLogin = async () => {
+    //     setLoading(true);
+    //     try {
+    //         await signInWithEmailAndPassword(auth, email, password);
+    //         alert("Welcome" + email);
+    //         console.log("Successfully sign in");
+    //         navigation.navigate(Products)
+    //     } catch (error) {
+    //         console.log("Error sign in");
+    //         alert("Wrong email or password");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+    // const handleLogin = async () => {
+    //     setLoading(true);
+        
+    //     try {
+          
+    //         const response = await axios.post(`http://192.168.1.19:8000/api/signin`, {email: email, password})
+    //         alert("Welcome" + email);
+    //         console.log("Successfully sign in", response.data);
+    //         navigation.navigate(Products)
+    //     } catch (error) {
+    //         console.log("Error sign in");
+    //         alert("Wrong email or password");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+       function handleLogin() {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            alert("Welcome" + email);
-            console.log("Successfully sign in");
-            navigation.navigate(Products)
+               const userData = {email: email, password}
+        axios.post(`http://192.168.1.19:8000/api/signin`, userData).then((result) => {
+          if(result.data.status == 'ok'){
+            Alert.alert('Logged in successful');
+            AsyncStorage.setItem("token", result.data.data);
+            navigation.getParent().setParams({ token: result.data.token });
+              navigation.reset({
+        index: 0,
+        routes: [{ name: 'Tabs' }],
+      });
+          } else {
+            Alert.alert('Wrong Email or Password,' + 'Try again');
+          } 
+        });
         } catch (error) {
-            console.log("Error sign in");
-            alert("Wrong email or password");
-        } finally {
-            setLoading(false);
+          console.log("Error sign in", error);
+          Alert.alert("Authentication error" + error);
         }
+   
     }
-
-    
   
   return (
     <View className='grid justify-items-center'>
