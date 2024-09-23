@@ -4,7 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from '../screens/Login';
 import Updates from "expo-updates"
-
+import { Link } from 'expo-router';
 
 // import { Button, Header, XGroup, XStack, YStack } from 'tamagui'
 const ProfilePage = ({navigation} : {navigation: any}) => {
@@ -17,7 +17,7 @@ const ProfilePage = ({navigation} : {navigation: any}) => {
       console.log("Token:", token);
 
       if (token) {
-        const response = await axios.post('http://192.168.1.19:8000/api/user-data', { token });
+        const response = await axios.post('http://192.168.1.3:8000/api/user-data', { token });
         console.log("User Data:", response.data);
         setUserData(response.data.data); 
       } else {
@@ -64,6 +64,7 @@ const logout = async () => {
       ) : (
         <Text>No user data found</Text>
       )}
+   
     </View>
   )
 }

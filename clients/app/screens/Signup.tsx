@@ -1,6 +1,6 @@
 import { View, Text, Alert } from 'react-native'
 import React, {useState} from 'react'
-import { FIREBASE_AUTH } from '../firebase/firebaseConfig';
+
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { Button, TextInput } from 'react-native-paper';
 import axios from 'axios';
@@ -13,7 +13,7 @@ const Signup = ({navigation}:{navigation: any}) => {
     const [fullname, setFullname] = useState('');
     const [phoneNumber, setPhoneNum] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIREBASE_AUTH;
+
 
   const inputs = () => {
     if(!email || !password || !confirmPassword || !fullname || !phoneNumber) {
@@ -35,7 +35,7 @@ const Signup = ({navigation}:{navigation: any}) => {
     if(!inputs()) return;
         setLoading(true);
         try {
-            await axios.post(`http://192.168.1.19:8000/api/signup`, {email, password, fullname, phoneNumber}).then((result) => {
+            await axios.post(`http://192.168.1.3:8000/api/signup`, {email, password, fullname, phoneNumber}).then((result) => {
                 Alert.alert("Successfully created: ", email);
             console.log("Successfully sign up" + result.data);
             navigation.navigate(Login);

@@ -1,6 +1,5 @@
 import { View, Text, Alert } from 'react-native'
 import React, {useState} from 'react'
-import { FIREBASE_AUTH } from '../firebase/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { Button, TextInput } from 'react-native-paper';
 import { AlertDialog} from 'tamagui';
@@ -14,46 +13,15 @@ import { useNavigation } from '@react-navigation/native';
 
 import ProfilePage from '../pages/ProfilePage';
 const Login = ({navigation}:{navigation: any}) => {
+  const API_URL = process.env.API_URL;
     // const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIREBASE_AUTH;
-
-    // const handleLogin = async () => {
-    //     setLoading(true);
-    //     try {
-    //         await signInWithEmailAndPassword(auth, email, password);
-    //         alert("Welcome" + email);
-    //         console.log("Successfully sign in");
-    //         navigation.navigate(Products)
-    //     } catch (error) {
-    //         console.log("Error sign in");
-    //         alert("Wrong email or password");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-    // const handleLogin = async () => {
-    //     setLoading(true);
-        
-    //     try {
-          
-    //         const response = await axios.post(`http://192.168.1.19:8000/api/signin`, {email: email, password})
-    //         alert("Welcome" + email);
-    //         console.log("Successfully sign in", response.data);
-    //         navigation.navigate(Products)
-    //     } catch (error) {
-    //         console.log("Error sign in");
-    //         alert("Wrong email or password");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
        function handleLogin() {
         try {
                const userData = {email: email, password}
-        axios.post(`http://192.168.1.19:8000/api/signin`, userData).then((result) => {
+        axios.post(`http://192.168.1.3:8000/api/signin`, userData).then((result) => {
           if(result.data.status == 'ok'){
             Alert.alert('Logged in successful');
             AsyncStorage.setItem("token", result.data.data);

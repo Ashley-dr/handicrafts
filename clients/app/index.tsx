@@ -13,25 +13,19 @@ import { getToken, verifyToken } from './AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import Tabs from './Tabs';
+
 // const Tab = createMaterialBottomTabNavigator();
 const Tab = createMaterialBottomTabNavigator ();
 const Stack = createStackNavigator();
 
-
-const AuthStack: React.FC = () => (
-  <Tab.Navigator>
- 
-    <Tab.Screen name="Products" component={Products} options={{title: "Products"}}/>
-    <Tab.Screen name="ProfilePage" component={ProfilePage} options={{title: "Profile Page"}}/>
-    </Tab.Navigator>
-  
-)
 
 const LoginNav: React.FC = () => ( 
   
   <Tab.Navigator>
       <Tab.Screen name="Login" component={Login} options={{title: "Log in"}}/>
       <Tab.Screen name="Signup" component={Signup} options={{title: "Sign up"}}/>
+      
     </Tab.Navigator>
 )
 
@@ -62,7 +56,7 @@ const Home = () => {
   if(isAuth === null){
     return null;
   }
- return isAuth ? <AuthStack/> : <LoginNav/>;
+ return isAuth ? <Tabs/> : <LoginNav/>;
  
  
 }

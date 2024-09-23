@@ -7,9 +7,10 @@ const app = express();
 const port = 8000;
 
 const authRoute = require("./routes/AuthRoute");
+const productRoute = require("./routes/ProductsRoute");
 dotenv.config();
 //middleware//
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 //middleware//
@@ -25,7 +26,7 @@ mongoose
 // mongodb //
 
 app.use("/api", authRoute);
-
+app.use("/product", productRoute);
 app.listen(port, () => {
   console.log("Server runnig: ", port);
 });

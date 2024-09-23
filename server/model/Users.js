@@ -16,9 +16,15 @@ const Users = new mongoose.Schema({
     type: String,
     required: [true, "Full name Required"],
   },
-  phoneNumber: {
-    type: String,
-  },
+
+  userProfile: { type: String },
+  validId: { type: String },
+
+  address: { type: String },
+  phoneNumber: { type: String },
+  isSeller: { type: String },
+  isStaff: { type: String },
+  isAdmin: { type: String },
   resetToken: { type: String },
   resetTokenExpiration: { type: String },
 });

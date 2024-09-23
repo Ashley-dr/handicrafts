@@ -12,6 +12,7 @@ import { getToken, verifyToken } from './AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+
 const Tab = createMaterialBottomTabNavigator ();
 const Stack = createStackNavigator();
 const Auth = () => {
@@ -20,6 +21,7 @@ const Auth = () => {
   <Tab.Navigator>
       <Tab.Screen name="Login" component={Login} options={{title: "Log in"}}/>
       <Tab.Screen name="Signup" component={Signup} options={{title: "Sign up"}}/>
+
     </Tab.Navigator>
   )
 }

@@ -6,6 +6,8 @@ const User = require("../model/Users");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 const router = express.Router();
+const path = require("path");
+const Users = require("../model/Users");
 dotenv.config();
 router.post("/signup", async (req, res) => {
   console.log(req.body);
@@ -24,7 +26,11 @@ router.post("/signup", async (req, res) => {
       email,
       phoneNumber,
       password: hashedPass,
+      isSeller: "null",
+      isStaff: "null",
+      isAdmin: "null",
     });
+
     await user.save();
     res.status(201).json({ message: "Sign up successfull" });
   } catch (error) {
@@ -62,51 +68,62 @@ router.post("/signin", async (req, res) => {
 router.post("/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email });
-    const resetToken = jwt.sign({ userId: user._id }, 252525, {
-      expiresIn: "1h",
-    });
+    console.log("Received email:", email);
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
 
+    const resetToken = crypto.randomBytes(20).toString("hex");
     user.resetToken = resetToken;
     user.resetTokenExpiration = Date.now() + 3600000;
     await user.save();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.PASSWORD_APP_EMAIL,
       },
     });
 
-    // const mailView = (
-    //   <html>
-    //     <body>
-    //       <h2>Password Reset</h2>
-    //       <p>You've requested to reset your password from Handicraft Account</p>
-    //       <p>
-    //         Please continue to reset password{" "}
-    //         <a href="http://localhost:8081/reset-password">Reset Password</a>
-    //       </p>
-    //       <p>If you didn't request to reset, ignore this email.</p>
-    //     </body>
-    //   </html>
-    // );
+    const mailView = `
+      <html>
+        <body>
+          <h2>Password Reset</h2>
+          <p>You've requested to reset your password from Handicraft Account</p>
+          <br/>
+          <p>Reset Code</p>
+          <br/>
+          <p>
+           ${resetToken}
+          </p>
+          <br/>
+          <p>If you didn't request to reset, ignore this email.</p>
+        </body>
+      </html>
+    `;
+
     await transporter.sendMail({
-      from: '"HANDICRAFT"',
+      from: process.env.EMAIL,
       to: email,
       subject: "Password Reset",
-      html: `Click <a href="http://192.168.0.18:8000/reset-password/${resetToken}">here</a> to reset your password.`,
+      html: mailView,
     });
-    res.status(201).json({ message: "Email sent" });
+
+    res.status(200).json({ message: "Password reset email sent successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error to send email" });
+    console.error("Error in forgot-password route:", error);
+    res.status(500).json({ message: "Error sending password reset email" });
   }
 });
 
 router.post("/reset-password", async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
+    const { token, password } = req.body;
     const user = await User.findOne({
       resetToken: token,
       resetTokenExpiration: { $gt: Date.now() },
@@ -114,8 +131,8 @@ router.post("/reset-password", async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid or token Expired" });
     }
-    const hashedPass = await bcrypt.hash(newPassword, 10);
-    user.hashedPass = hashedPass;
+    const hashedPass = await bcrypt.hash(password, 10);
+    user.password = hashedPass;
     user.resetToken = undefined;
     user.resetTokenExpiration = undefined;
     await user.save();
@@ -124,6 +141,7 @@ router.post("/reset-password", async (req, res) => {
     res.status(500).json({ message: "Error to change password" });
   }
 });
+
 router.post("/user-data", async (req, res) => {
   const { token } = req.body;
   if (!token) {
@@ -138,6 +156,35 @@ router.post("/user-data", async (req, res) => {
     });
   } catch (error) {
     console.log("Error receiving user data");
+  }
+});
+
+router.get("/all-users", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.put("/user-update/:id", async (req, res) => {
+  try {
+    const { isNewSeller } = req.body;
+    const users = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+router.delete("/user-delete/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User removed." });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 module.exports = router;

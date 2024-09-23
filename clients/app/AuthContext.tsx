@@ -14,7 +14,7 @@ export async function getToken() {
 
 export async function verifyToken(token: any) {
   try {
-    const response = await axios.post('http://192.168.1.19:8000/api/user-data', { token });
+    const response = await axios.post('http://192.168.1.3:8000/api/user-data', { token });
     return response.data.data ? true : false;
   } catch (error) {
     console.log("Error verifying token:", error);
