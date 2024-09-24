@@ -43,7 +43,9 @@ router.post("/signin", async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ data: "Account not exists" });
+      return res
+        .status(400)
+        .json({ status: "error", message: "Account not exists" });
     }
     // console.log("Stored hashed password:", user.password);
     // console.log("Provided password:", password);
@@ -97,6 +99,8 @@ router.post("/forgot-password", async (req, res) => {
           <p>You've requested to reset your password from Handicraft Account</p>
           <br/>
           <p>Reset Code</p>
+          <br/>
+           <p>Valid for 1 Hour.</p>
           <br/>
           <p>
            ${resetToken}

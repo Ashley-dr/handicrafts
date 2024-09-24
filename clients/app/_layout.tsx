@@ -15,12 +15,12 @@
 //   const colorScheme = useColorScheme();
 //   return (
 //     <Stack>
-//       <Tabs.Screen
+//       <Tabs.Screen 
 //         name="index"
 //         options={{
 //           title: "HANDICRAFT",
-//           headerStyle: tw`bg-[#DFC4A4]`,
-//           headerTitleStyle: tw`text-[#4f3a3a] text-xl font-bold`,
+//           headerShown: false,
+          
 //         }}
 //       />
 //     </Stack>

@@ -1,4 +1,4 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, ImageBackground } from "react-native";
 import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -12,11 +12,9 @@ import axios from "axios";
 import ForgotPassword from "./ForgotPassword";
 import { Link } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Updates from "expo-updates";
-import { useNavigation } from "@react-navigation/native";
 import tw from "twrnc";
 
-import ProfilePage from "../pages/ProfilePage";
+
 const Login = ({ navigation }: { navigation: any }) => {
   const API_URL = process.env.API_URL;
   // const navigation = useNavigation();
@@ -30,16 +28,20 @@ const Login = ({ navigation }: { navigation: any }) => {
         .post(`http://192.168.1.3:8000/api/signin`, userData)
         .then((result) => {
           if (result.data.status == "ok") {
-            Alert.alert("Logged in successful");
+            // Alert.alert("Logged in successful");
             AsyncStorage.setItem("token", result.data.data);
             navigation.getParent().setParams({ token: result.data.token });
             navigation.reset({
               index: 0,
               routes: [{ name: "Tabs" }],
             });
-          } else {
-            Alert.alert("Wrong Email or Password," + "Try again");
-          }
+          } else if (result.data.message === "Account not exists") {
+          // Account not found
+          Alert.alert("Error", "Account does not exist");
+        } else if (result.data.message === "Invalid password") {
+          // Invalid password
+          Alert.alert("Error", "Invalid password");
+        }
         });
     } catch (error) {
       console.log("Error sign in", error);
@@ -48,18 +50,20 @@ const Login = ({ navigation }: { navigation: any }) => {
   }
 
   return (
-    <View style={tw`flex-1 justify-center items-center bg-[#FFFCEF]`}>
+  
+    <View className="flex-1 justify-center items-center bg-[#FFFCEF] " >
       <View style={tw`bg-[#FFFCEF] p-5 rounded-lg w-[90%]`}>
-        <h1 style={tw`text-[28px] font-bold text-center m-[6px]`}>
+        <Text style={tw`text-[28px] font-bold text-center m-[6px]`}>
           Welcome to Handicraft
-        </h1>
-        <h1 style={tw`text-[15px] font-light px-2 my-2`}>
+        </Text>
+        <Text style={tw`text-[15px] font-light px-2 my-2`}>
           Login now to avail exclusive promos and vouchers
-        </h1>
+        </Text>
         <TextInput
           value={email}
           style={tw`bg-[#efdbbb4f] text-[#AD9C8E] text-[12px] rounded-t-lg mb-4 w-full`}
-          placeholder="Email"
+          label="Email"
+          placeholder="Ex. user@gmail.com"
           placeholderTextColor="#4f3a3a94"
           autoCapitalize="none"
           onChangeText={(text) => setEmail(text)}
@@ -67,36 +71,39 @@ const Login = ({ navigation }: { navigation: any }) => {
         <TextInput
           secureTextEntry={true}
           value={password}
-          style={tw`bg-[#efdbbb4f] text-[#AD9C8E] text-[12px] rounded-t-lg  w-full transform-none focus:outline-none active:bg-violet-700`}
-          placeholder="Password"
+          style={tw`bg-[#efdbbb4f] text-[#AD9C8E] text-[12px] rounded-t-lg  w-full  focus:outline-none active:bg-violet-700`}
+          label="Password"
+          placeholder="Enter Password"
           placeholderTextColor="#4f3a3a94"
           autoCapitalize="none"
           onChangeText={(text) => setPassword(text)}
         />
-        <Text style={tw`text-[#4f3a3a] pb-3 text-end`}>
+      
+        <Button
+          onPress={handleLogin}
+          style={tw`bg-[#DFC4A4] rounded-md mt-5 mb-3`}
+          labelStyle={tw`text-[#4f3a3a] text-[13px]`}
+        >
+          Sign in
+        </Button>
+            <Text style={tw`text-[#4f3a3a] mt-3 pb-3 `}>
           <Link
             href="/screens/ForgotPassword"
-            style={tw`text-[#efdbbb] underline`}
+            // style={tw`text-[#efdbbb] underline`}
+            className="text-gray-900 underline"
           >
             Forgot password?
           </Link>
         </Text>
-        <Button
-          onPress={handleLogin}
-          style={tw`bg-[#DFC4A4] rounded-md mb-3`}
-          labelStyle={tw`text-[#4f3a3a] text-[12px]`}
-        >
-          Sign in
-        </Button>
-
-        <Text style={tw`text-[#4f3a3a] pt-1 text-center`}>
+        {/* <Text style={tw`text-[#4f3a3a] pt-1 text-center`}>
           Dont have account yet?{" "}
-          <Link href="/screens/Signup" style={tw`text-[#efdbbb] underline`}>
+          <Link href="/screens/Signup" style={tw`text-gray-600 underline`}>
             Signup Here{" "}
           </Link>
-        </Text>
+        </Text> */}
       </View>
     </View>
+
   );
 };
 

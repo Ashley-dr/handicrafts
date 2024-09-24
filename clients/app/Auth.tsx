@@ -1,32 +1,34 @@
-import { View, Text, Alert } from "react-native";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {  } from "react";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
-import { Link } from "expo-router";
-import Products from "./pages/Products";
 import Login from "./screens/Login";
 import Signup from "./screens/Signup";
-import ProfilePage from "./pages/ProfilePage";
-import { getToken, verifyToken } from "./AuthContext";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import tw from "twrnc";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 const Auth = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator barStyle={tw`bg-[#DFC4A4] `} >
       <Tab.Screen
         name="Login"
         component={Login}
-        options={{ title: "Log in" }}
+         options={{
+        title: "Sign in",
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="account-arrow-left" color={color} size={30} />
+        ),
+      }}
       />
       <Tab.Screen
         name="Signup"
         component={Signup}
-        options={{ title: "Sign up" }}
+           options={{
+        title: "Sign up",
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="text-box-plus" color={color} size={26} />
+        ),
+      }}
       />
     </Tab.Navigator>
   );

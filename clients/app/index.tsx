@@ -17,6 +17,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Tabs from "./Tabs";
 import tw from "twrnc";
 import "./app.css";
+import Auth from "./Auth";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -69,7 +70,7 @@ const Home = () => {
   if (isAuth === null) {
     return null;
   }
-  return isAuth ? <Tabs /> : <LoginNav />;
+  return isAuth ? <Tabs /> : <Auth />;
 };
 
 export default Home;

@@ -1,21 +1,16 @@
-import { View, Text, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation' 
-import { Link } from 'expo-router'
 import Products from './pages/Products'
-import Login from './screens/Login'
-import Signup from './screens/Signup'
 import ProfilePage from './pages/ProfilePage';
-import { getToken, verifyToken } from './AuthContext';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
+import tw from "twrnc";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const Tab = createMaterialBottomTabNavigator ();
-const Stack = createStackNavigator();
+
 const Tabs = () => {
    const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -45,9 +40,16 @@ const Tabs = () => {
 
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator  barStyle={tw`bg-[#DFC4A4] `}>
  
-    <Tab.Screen name="Products" component={Products} options={{title: "Products"}}/>
+    <Tab.Screen name="Products" component={Products} 
+     options={{
+        title: "Home",
+        
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="nuxt" color={color}  size={30} />
+        ),
+      }}/>
     <Tab.Screen name="Dashboard" component={Dashboard} options={{title: "Dashboard"}}/>
     {userData?.isAdmin == "true" && (<Tab.Screen name="AdminPanel" component={AdminPanel} options={{title: "AdminPanel"}}/>)}
     <Tab.Screen name="ProfilePage" component={ProfilePage} options={{title: "Profile Page"}}/>
