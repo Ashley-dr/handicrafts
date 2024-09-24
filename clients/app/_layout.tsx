@@ -1,18 +1,30 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Tabs } from 'expo-router'
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { Stack } from "expo-router"
-import { useColorScheme } from 'react-native'
-import { tamaguiConfig } from '../tamagui.config'
-import { TamaguiProvider } from 'tamagui'
-const _layout = () => {
-  const colorScheme = useColorScheme();
-  return (
-       <Stack>     
-          <Tabs.Screen name='index' options={{title: "HANDICRAFT"}}/>    
-        </Stack>
-  )
-}
+// import { View, Text } from "react-native";
+// import React from "react";
+// import { Tabs } from "expo-router";
+// import {
+//   DarkTheme,
+//   DefaultTheme,
+//   ThemeProvider,
+// } from "@react-navigation/native";
+// import { Stack } from "expo-router";
+// import { useColorScheme } from "react-native";
+// import { tamaguiConfig } from "../tamagui.config";
+// import { TamaguiProvider } from "tamagui";
+// import tw from "twrnc";
+// const _layout = () => {
+//   const colorScheme = useColorScheme();
+//   return (
+//     <Stack>
+//       <Tabs.Screen
+//         name="index"
+//         options={{
+//           title: "HANDICRAFT",
+//           headerStyle: tw`bg-[#DFC4A4]`,
+//           headerTitleStyle: tw`text-[#4f3a3a] text-xl font-bold`,
+//         }}
+//       />
+//     </Stack>
+//   );
+// };
 
-export default _layout
+// export default _layout;
