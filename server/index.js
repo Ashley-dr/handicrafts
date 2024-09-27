@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 const authRoute = require("./routes/AuthRoute");
 const productRoute = require("./routes/ProductsRoute");
@@ -28,5 +28,5 @@ mongoose
 app.use("/api", authRoute);
 app.use("/product", productRoute);
 app.listen(port, () => {
-  console.log("Server runnig: ", port);
+  console.log("Server running: ", port);
 });
