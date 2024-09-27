@@ -14,7 +14,6 @@ import { Link } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import tw from "twrnc";
 
-
 const Login = ({ navigation }: { navigation: any }) => {
   const API_URL = process.env.API_URL;
   // const navigation = useNavigation();
@@ -36,12 +35,12 @@ const Login = ({ navigation }: { navigation: any }) => {
               routes: [{ name: "Tabs" }],
             });
           } else if (result.data.message === "Account not exists") {
-          // Account not found
-          Alert.alert("Error", "Account does not exist");
-        } else if (result.data.message === "Invalid password") {
-          // Invalid password
-          Alert.alert("Error", "Invalid password");
-        }
+            // Account not found
+            Alert.alert("Error", "Account does not exist");
+          } else if (result.data.message === "Invalid password") {
+            // Invalid password
+            Alert.alert("Error", "Invalid password");
+          }
         });
     } catch (error) {
       console.log("Error sign in", error);
@@ -50,8 +49,7 @@ const Login = ({ navigation }: { navigation: any }) => {
   }
 
   return (
-  
-    <View className="flex-1 justify-center items-center bg-[#FFFCEF] " >
+    <View className="flex-1 justify-center items-center bg-[#FFFCEF] ">
       <View style={tw`bg-[#FFFCEF] p-5 rounded-lg w-[90%]`}>
         <Text style={tw`text-[28px] font-bold text-center m-[6px]`}>
           Welcome to Handicraft
@@ -78,7 +76,7 @@ const Login = ({ navigation }: { navigation: any }) => {
           autoCapitalize="none"
           onChangeText={(text) => setPassword(text)}
         />
-      
+
         <Button
           onPress={handleLogin}
           style={tw`bg-[#DFC4A4] rounded-md mt-5 mb-3`}
@@ -86,7 +84,7 @@ const Login = ({ navigation }: { navigation: any }) => {
         >
           Sign in
         </Button>
-            <Text style={tw`text-[#4f3a3a] mt-3 pb-3 `}>
+        <Text style={tw`text-[#4f3a3a] mt-3 pb-3 `}>
           <Link
             href="/screens/ForgotPassword"
             // style={tw`text-[#efdbbb] underline`}
@@ -103,7 +101,6 @@ const Login = ({ navigation }: { navigation: any }) => {
         </Text> */}
       </View>
     </View>
-
   );
 };
 

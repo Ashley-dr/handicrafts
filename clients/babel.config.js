@@ -5,6 +5,7 @@ module.exports = function (api) {
     plugins: [
       "nativewind/babel",
       "react-native-paper/babel",
+      "react-native-reanimated/plugin",
       [
         "@tamagui/babel-plugin",
         {
