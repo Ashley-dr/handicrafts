@@ -27,6 +27,9 @@ mongoose
 
 app.use("/api", authRoute);
 app.use("/product", productRoute);
+app.get("/", (req, res) => {
+  res.send("port running");
+});
 app.listen(port, () => {
   console.log("Server running: ", port);
 });
