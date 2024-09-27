@@ -1,10 +1,6 @@
 import { View, Text, Alert, ImageBackground } from "react-native";
 import React, { useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
+
 import { Button, TextInput } from "react-native-paper";
 import { AlertDialog } from "tamagui";
 import Products from "../pages/Products";
